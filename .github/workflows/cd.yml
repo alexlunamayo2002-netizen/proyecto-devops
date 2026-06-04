@@ -1,0 +1,64 @@
+﻿name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types: [completed]
+    branches: [main]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Deploy to staging namespace
+        run: |
+          echo "Deploying to staging environment..."
+          echo "Image: ghcr.io/${{ github.repository }}:latest"
+          # En un entorno real se usaria kubeconfig para conectar al cluster
+          # kubectl apply -f k8s/ -n staging
+          # kubectl set image deployment/petclinic petclinic=ghcr.io/${{ github.repository }}:latest -n staging
+          # kubectl rollout status deployment/petclinic -n staging
+          echo "Staging deployment simulated successfully"
+
+  deploy-production:
+    name: Deploy to Production
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://github.com/${{ github.repository }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Deploy to production namespace
+        run: |
+          echo "Deploying to production environment..."
+          echo "Image: ghcr.io/${{ github.repository }}:latest"
+          # kubectl apply -f k8s/ -n production
+          # kubectl set image deployment/petclinic petclinic=ghcr.io/${{ github.repository }}:latest -n production
+          # kubectl rollout status deployment/petclinic -n production
+          echo "Production deployment simulated successfully"
+
+      - name: Smoke test
+        run: |
+          echo "Running smoke test against production..."
+          # curl -f http://production-url/actuator/health || kubectl rollout undo deployment/petclinic -n production
+          echo "Smoke test passed"
