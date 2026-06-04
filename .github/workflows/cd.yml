@@ -1,4 +1,4 @@
-﻿name: CD Pipeline
+name: CD Pipeline
 
 on:
   workflow_run:
@@ -31,7 +31,7 @@ jobs:
           # kubectl apply -f k8s/ -n staging
           # kubectl set image deployment/petclinic petclinic=ghcr.io/${{ github.repository }}:latest -n staging
           # kubectl rollout status deployment/petclinic -n staging
-          echo "Staging deployment simulated successfully"
+          echo "Staging deployment simulated successfully"`n`n      - name: OWASP ZAP Baseline Scan`n        uses: zaproxy/action-baseline@v0.14.0`n        with:`n          target: "http://localhost:8080"`n          allow_issue_writing: false`n        continue-on-error: true
 
   deploy-production:
     name: Deploy to Production

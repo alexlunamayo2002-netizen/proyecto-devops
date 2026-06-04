@@ -35,6 +35,11 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('app/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
 
+      - name: Gitleaks secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build and Test with coverage
         run: chmod +x mvnw && ./mvnw verify --no-transfer-progress
 
