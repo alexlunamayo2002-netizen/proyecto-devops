@@ -1,8 +1,5 @@
-﻿title = "Gitleaks Configuration"
+title = "Gitleaks Configuration"
 
 [allowlist]
   description = "Allow test and example files"
-  paths = [
-    '''test''',
-    '''docs'''
-  ]
+  paths = ['''test''', '''docs''']
