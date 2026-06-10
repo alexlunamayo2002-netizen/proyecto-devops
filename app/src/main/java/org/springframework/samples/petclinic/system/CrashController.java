@@ -30,7 +30,6 @@ class CrashController {
 
 	@GetMapping("/oups")
 	public String triggerException() {
-		BUG INTENCIONAL PARA SIMULAR INCIDENTE
 		throw new RuntimeException(
 				"Expected: controller used to showcase what " + "happens when an exception is thrown");
 	}
