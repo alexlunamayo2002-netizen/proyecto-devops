@@ -1,0 +1,82 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "demo-devops",
+    "title": "Demo DevOps - PetClinic",
+    "tags": [ "demo" ],
+    "timezone": "browser",
+    "refresh": "5s",
+    "time": { "from": "now-15m", "to": "now" },
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        },
+        {
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "iconColor": "red",
+          "name": "Commits",
+          "tags": ["commit"]
+        }
+      ]
+    },
+    "panels": [
+      {
+        "type": "stat",
+        "title": "Pods Activos",
+        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+        "targets": [ { "expr": "kube_deployment_status_replicas_ready{deployment=\"petclinic\"}", "legendFormat": "Pods" } ]
+      },
+      {
+        "type": "stat",
+        "title": "Reinicios (Restarts)",
+        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+        "targets": [ { "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"default\", pod=~\"petclinic.*\"})", "legendFormat": "Restarts" } ]
+      },
+      {
+        "type": "stat",
+        "title": "RAM Actual",
+        "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+        "targets": [ { "expr": "sum(container_memory_working_set_bytes{namespace=\"default\", pod=~\"petclinic.*\"})", "legendFormat": "RAM" } ],
+        "fieldConfig": { "defaults": { "unit": "bytes" } }
+      },
+      {
+        "type": "stat",
+        "title": "CPU Actual (Cores)",
+        "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+        "targets": [ { "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"default\", pod=~\"petclinic.*\"}[1m]))", "legendFormat": "CPU" } ]
+      },
+      {
+        "type": "timeseries",
+        "title": "Uso de CPU",
+        "gridPos": { "h": 10, "w": 12, "x": 0, "y": 4 },
+        "targets": [ { "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"default\", pod=~\"petclinic.*\"}[1m]))", "legendFormat": "CPU (Cores)" } ]
+      },
+      {
+        "type": "timeseries",
+        "title": "Uso de Memoria RAM",
+        "gridPos": { "h": 10, "w": 12, "x": 12, "y": 4 },
+        "targets": [ { "expr": "sum(container_memory_working_set_bytes{namespace=\"default\", pod=~\"petclinic.*\"})", "legendFormat": "RAM" } ],
+        "fieldConfig": { "defaults": { "unit": "bytes" } }
+      },
+      {
+        "type": "timeseries",
+        "title": "Tráfico de Red",
+        "gridPos": { "h": 10, "w": 24, "x": 0, "y": 14 },
+        "targets": [
+          { "expr": "sum(rate(container_network_receive_bytes_total{namespace=\"default\", pod=~\"petclinic.*\"}[1m]))", "legendFormat": "Recibido" },
+          { "expr": "sum(rate(container_network_transmit_bytes_total{namespace=\"default\", pod=~\"petclinic.*\"}[1m]))", "legendFormat": "Transmitido" }
+        ],
+        "fieldConfig": { "defaults": { "unit": "Bps" } }
+      }
+    ]
+  },
+  "overwrite": true
+}

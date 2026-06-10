@@ -1,0 +1,45 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "demo-devops",
+    "title": "Demo DevOps - PetClinic",
+    "tags": [ "demo" ],
+    "timezone": "browser",
+    "refresh": "5s",
+    "time": { "from": "now-15m", "to": "now" },
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        },
+        {
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "iconColor": "red",
+          "name": "Commits",
+          "tags": ["commit"]
+        }
+      ]
+    },
+    "panels": [
+      {
+        "type": "timeseries",
+        "title": "Uso de CPU - PetClinic",
+        "gridPos": { "h": 15, "w": 24, "x": 0, "y": 0 },
+        "targets": [
+          {
+            "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"default\", pod=~\"petclinic.*\"}[1m]))",
+            "legendFormat": "CPU PetClinic"
+          }
+        ]
+      }
+    ]
+  },
+  "overwrite": true
+}
