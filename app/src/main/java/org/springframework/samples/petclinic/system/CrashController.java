@@ -37,3 +37,5 @@ class CrashController {
 }
 // BUG Intencional
 // BUG Intencional;;;;
+// BUG INTENCIONAL PARA SIMULAR INCIDENTE
+ESTO ROMPE LA COMPILACION;
